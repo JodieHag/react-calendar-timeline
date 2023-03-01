@@ -100,7 +100,7 @@ $weekend: rgba(250, 246, 225, 0.5);
       }
       &.rct-day-6,
       &.rct-day-0 {
-        background: $weekend;
+        // background: $weekend;
       }
     }
   }
@@ -118,10 +118,10 @@ $weekend: rgba(250, 246, 225, 0.5);
       z-index: 40;
     }
     .rct-hl-odd {
-      background: $row-background-odd;
+      // background: $row-background-odd;
     }
     .rct-hl-even {
-      background: $row-background-even;
+      // background: $row-background-even;
     }
   }
 
@@ -138,11 +138,11 @@ $weekend: rgba(250, 246, 225, 0.5);
     align-items: center;
     justify-content: center;
     height: 100%;
-    border-bottom: 1px solid #bbb;
+    // border-bottom: 1px solid #bbb;
     cursor: pointer;
     font-size: 14px;
-    background-color: rgb(240, 240, 240);
-    border-left:  2px solid #bbb;
+    background-color: rgb(253, 253, 253);
+    // border-left:  2px solid #bbb;
   }
 
   .rct-dateHeader-primary {
@@ -153,7 +153,7 @@ $weekend: rgba(250, 246, 225, 0.5);
   }
 
   .rct-header-root {
-    background: #c52020;
+    background: #65b9cc;
     border-bottom: 1px solid #bbb;
   }
 

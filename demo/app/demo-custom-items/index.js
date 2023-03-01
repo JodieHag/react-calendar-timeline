@@ -38,16 +38,35 @@ export default class App extends Component {
       .add(1, 'day')
       .toDate()
 
+    console.log('constructor', defaultTimeEnd, defaultTimeStart)
     this.state = {
       groups,
-      items,
+      items: items,
       defaultTimeStart,
       defaultTimeEnd
     }
   }
 
   handleCanvasClick = (groupId, time, event) => {
-    console.log('Canvas clicked', groupId, moment(time).format())
+    const timeSelectedStart = moment(time).utcOffset(1).set({hour:0,minute:0,second:0,millisecond:0});
+    const timeSelectedEnd = moment(time).utcOffset(1).set({hour:23,minute:59,second:59,millisecond:0});
+    console.log('Canvas clicked', groupId, time, this.state.items[0], )
+    console.log('timeSelectedStart', timeSelectedStart.toISOString(), timeSelectedStart.format())
+    console.log('timeSelectedEnd', timeSelectedEnd.toISOString(), timeSelectedEnd.format())
+    const newItem = [{
+      id: this.state.items.length + 1,
+      start: timeSelectedStart,
+      end: timeSelectedEnd,
+      group: groupId,
+      title: 'new event - reserved'
+    }]
+    this.setState({
+      ...this.state,
+        items: [
+        ...this.state.items,
+          ...newItem
+      ]
+    })
   }
 
   handleCanvasContextMenu = (group, time, e) => {
@@ -63,6 +82,7 @@ export default class App extends Component {
   }
 
   handleItemDoubleClick = (itemId, _, time) => {
+    alert(`ITEM: EDICION`)
     console.log('Double Click: ' + itemId, moment(time).format())
   }
 
@@ -93,14 +113,15 @@ export default class App extends Component {
 
   handleItemResize = (itemId, time, edge) => {
     const { items } = this.state
-
+    const timeNew = edge !== 'left' ? moment(time).utcOffset(1).set({hour:23,minute:59,second:59,millisecond:0}) : moment(time).utcOffset(1).set({hour:0,minute:0,second:0,millisecond:0})
+    console.log('resized', time, timeNew.toISOString(), timeNew.format())
     this.setState({
       items: items.map(
         item =>
           item.id === itemId
             ? Object.assign({}, item, {
-              start: edge === 'left' ? time : item.start,
-              end: edge === 'left' ? item.end : time
+              start: edge === 'left' ? timeNew : item.start,
+              end: edge === 'left' ? item.end : timeNew
             })
             : item
       )
@@ -201,8 +222,7 @@ export default class App extends Component {
         sidebarContent={<div>Above The Left</div>}
         // rightSidebarWidth={150}
         // rightSidebarContent={<div>Above The Right</div>}
-
-        canMove
+        canMove={false}
         canResize="right"
         canSelect
         itemsSorted
@@ -212,18 +232,17 @@ export default class App extends Component {
         lineHeight={40}
         showCursorLine
         // resizeDetector={containerResizeDetector}
-
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
         itemRenderer={this.itemRenderer}
         // groupRenderer={this.groupRenderer}
-
         onCanvasClick={this.handleCanvasClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
         onItemClick={this.handleItemClick}
         onItemSelect={this.handleItemSelect}
         onItemContextMenu={this.handleItemContextMenu}
-        onItemMove={this.handleItemMove}
+        // onItemMove={this.handleItemMove}
+        onItemMove={null}
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}

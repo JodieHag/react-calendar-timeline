@@ -18,23 +18,22 @@ export default function (groupCount = 30, itemCount = 1000, daysInPast = 30) {
   let items = []
   for (let i = 0; i < itemCount; i++) {
     const startDate = faker.date.recent(daysInPast).valueOf() + (daysInPast * 0.3) * 86400 * 1000
-    const startValue = Math.floor(moment(startDate).valueOf() / 10000000) * 10000000
-    const endValue = moment(startDate + faker.random.number({min: 2, max: 20}) * 15 * 60 * 1000).valueOf()
-
+    const startValue = moment(startDate).utcOffset(1).set({hour:0,minute:0,second:0,millisecond:0}).valueOf()
+    const endValue = moment(startDate).utcOffset(1).set({hour:23,minute:59,second:59,millisecond:0}).valueOf()
     items.push({
       id: i + '',
-      group: faker.random.number({ min: 1, max: groups.length }) + '',
-      title: faker.hacker.phrase(),
+      group: i + '',
+      title: `${faker.commerce.price()}`,
       start: startValue,
       end: endValue,
-      canMove: startValue > new Date().getTime(),
+      // canMove: startValue > new Date().getTime(),
       canResize: startValue > new Date().getTime() ? (endValue > new Date().getTime() ? 'both' : 'left') : (endValue > new Date().getTime() ? 'right' : false),
       className: (moment(startDate).day() === 6 || moment(startDate).day() === 0) ? 'item-weekend' : '',
       bgColor: randomColor({ luminosity: 'light', seed: randomSeed + i, format:'rgba', alpha:0.6 }),
       selectedBgColor: randomColor({ luminosity: 'light', seed: randomSeed + i, format:'rgba', alpha:1 }),
       color: randomColor({ luminosity: 'dark', seed: randomSeed + i }),
       itemProps: {
-        'data-tip': faker.hacker.phrase(),
+        'data-tip': `Label ${faker.commerce.price()}`,
       }
     })
   }
